@@ -424,7 +424,43 @@ header p {
     Chatbot.init({
         chatflowid: "16d834f1-2a93-408a-b6c8-ae9c25e688f7",
         apiHost: "https://flowise-production-dd5a.up.railway.app",
+        theme: {
+            primaryColor: "#0ea5e9",
+            secondaryColor: "#2563eb",
+            backgroundColor: "#020617",
+            textColor: "#e5e7eb",
+            botMessageColor: "#1e293b",
+            userMessageColor: "#2563eb",
+
+            // --- CHAT WINDOW CONFIG ---
+                chatWindow: {
+                    
+                    // Footer
+                    footer: {
+                        showFooter: false,
+                    }
+                }
+        }
     })
+
+    .then(function (instance) {
+                // Expose a small global helper object: window.FlowiseChat.open()/toggle()
+                try {
+                    window.FlowiseChat = {
+                        instance: instance,
+                        open: (typeof instance?.open === 'function') ? function () { instance.open(); } : function () {
+                            var btn = document.querySelector('[data-flowise-open]') || document.querySelector('.flowise-embed-open') || document.querySelector('button[aria-label="Open chat"]');
+                            if (btn instanceof HTMLElement) btn.click();
+                        },
+                        toggle: (typeof instance?.toggle === 'function') ? function () { instance.toggle(); } : undefined
+                    };
+                } catch (e) {
+                    console.warn('Could not attach FlowiseChat helper', e);
+                }
+            })
+            .catch(function (err) {
+                console.error('Flowise init failed', err);
+            });
 </script>
 
 
